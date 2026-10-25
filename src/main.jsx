@@ -1,137 +1,161 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import { ArrowRight, ArrowLeft, Wifi, BatteryFull, Signal, Camera, LockKeyhole, Trophy, Users, CalendarDays, Images, Phone, MessageCircle, ChevronLeft, ChevronUp, Instagram, MapPin, ShieldCheck, Star, Dumbbell, Goal, Home, Volume2, VolumeX, X } from 'lucide-react';
+import React, {useEffect, useRef, useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {ShieldCheck, Trophy, CalendarDays, Images, Users, Phone, MessageCircle, Instagram, MapPin, LockKeyhole, Wifi, Signal, BatteryFull, Camera, Volume2, VolumeX, ChevronUp, ArrowRight, ArrowLeft, X, Home, Goal, Dumbbell, Star, Play, SkipForward, Music2} from 'lucide-react';
 import './style.css';
 
-// Uses Vite's base URL so images work locally and on GitHub Pages.
-const ASSET_BASE = import.meta.env.BASE_URL;
-const asset = (filename) => `${ASSET_BASE}${filename}`;
-
+// غيّر البيانات هنا فقط عند الحاجة.
 const CONFIG = {
-  academy: 'أكاديمية فيوري',
-  subtitle: 'FURY FOOTBALL ACADEMY',
-  city: 'جدة، المملكة العربية السعودية',
   whatsapp: '966566144141',
   instagram: '',
   maps: '',
   registrationUrl: '',
-  schedule: [
-    { day: 'السبت', time: '5:00 – 7:00 مساءً' },
-    { day: 'الاثنين', time: '5:00 – 7:00 مساءً' },
-    { day: 'الأربعاء', time: '5:00 – 7:00 مساءً' },
-  ],
   price: '200 ريال / شهر',
-  ageGroups: 'تُحدّد حسب أعمار اللاعبين المسجلين',
+  schedule: [
+    {ar: 'السبت', en: 'Saturday'},
+    {ar: 'الاثنين', en: 'Monday'},
+    {ar: 'الأربعاء', en: 'Wednesday'},
+  ],
 };
-
-const EN = {
-  'الأكاديمية':'Academy','البرامج':'Programs','المواعيد':'Schedule','الصور':'Gallery','التسجيل':'Registration','تواصل معنا':'Contact',
-  'جدة، المملكة العربية السعودية':'Jeddah, Saudi Arabia','السبت':'Saturday','الاثنين':'Monday','الأربعاء':'Wednesday',
-  '5:00 – 7:00 مساءً':'5:00 – 7:00 PM','200 ريال / شهر':'SAR 200 / month',
-  'تُحدّد حسب أعمار اللاعبين المسجلين':'Determined by registered players’ ages',
-  'اصنع مستقبلك في الملعب':'Build your future on the pitch',
-  'بيئة رياضية لتطوير المهارات الأساسية والعمل الجماعي والانضباط والشغف بكرة القدم.':'A football environment focused on core skills, teamwork, discipline, and passion.',
-  'أيام تدريب أسبوعيًا':'Training days per week','دقيقة لكل حصة':'Minutes per session',
-  'التفاصيل النهائية قابلة للتحديث من إدارة الأكاديمية.':'Final details are subject to confirmation by academy management.',
-  'برامجنا التدريبية':'Our training programs','المهارات الأساسية':'Core skills',
-  'التحكم بالكرة، التمرير، التسديد والمراوغة.':'Ball control, passing, shooting, and dribbling.',
-  'اللياقة والتطوير':'Fitness and development','تمارين مناسبة للمستوى العمري والقدرات البدنية.':'Age-appropriate exercises for different fitness levels.',
-  'اللعب الجماعي':'Team play','مباريات تطبيقية وروح الفريق والانضباط.':'Practice matches, teamwork, and discipline.',
-  'الفئات العمرية:':'Age groups:','مواعيد التدريب':'Training schedule',
-  'الجدول المقترح — يُرجى التأكد من الإدارة قبل الحضور.':'Proposed schedule — please confirm with management before attending.',
-  'الاشتراك الشهري':'Monthly membership','لحظات فيوري':'Fury moments',
-  'مساحة صور الأكاديمية. أضف صورك الحقيقية لاحقًا في مجلد public/gallery.':'Academy gallery. Add your real photos later in public/gallery.',
-  'التدريب':'Training','الإنجازات':'Achievements','المباريات':'Matches','اللاعبون':'Players',
-  'انضم إلى فيوري':'Join Fury','ابدأ رحلتك الكروية معنا. للتسجيل، تواصل مع الإدارة أو افتح نموذج التسجيل عند إضافته.':'Start your football journey with us. Contact management or use the registration form when available.',
-  'جاهز تدخل الملعب؟':'Ready to take the field?','الأماكن والرسوم تخضع لتأكيد الإدارة.':'Places and fees are subject to management confirmation.',
-  'ابدأ التسجيل':'Register now','خلّينا على تواصل':'Get in touch','واتساب':'WhatsApp','إنستغرام':'Instagram','الخرائط':'Maps','موقعنا':'Our location',
-  'تجربة رقمية تفاعلية لأكاديمية فيوري لكرة القدم':'An interactive digital experience for Fury Football Academy',
-  'افتح الجوال واستكشف عالم فيوري':'Unlock the phone and explore Fury',
-  'اسحب للأعلى أو اضغط لفتح القفل':'Swipe up or tap to unlock',
-  'أهلًا بك في':'Welcome to','عالم فيوري':'Fury world','هنا يبدأ الأبطال':'Where champions begin',
-  'العودة للرئيسية':'Back to home','إغلاق':'Close','العودة للشاشة الرئيسية':'Return to home screen',
-  'تصميم تجريبي قابل للتخصيص':'Customizable demo design',
+const COPY = {
+  ar: {
+    intro:'هنا يبدأ الأبطال', start:'ابدأ التجربة مع الصوت', silent:'الدخول بدون صوت', skip:'تخطي المقدمة', sound:'الصوت',
+    academy:'الأكاديمية', programs:'البرامج', schedule:'المواعيد', gallery:'الصور', register:'التسجيل', contact:'تواصل معنا',
+    welcome:'مرحبًا بك في عالم فيوري', hint:'اسحب للأعلى أو اضغط لفتح القفل', tagline:'اصنع مستقبلك في الملعب',
+    about:'بيئة رياضية لتطوير المهارات الأساسية والعمل الجماعي والانضباط والشغف بكرة القدم.',
+    core:'المهارات الأساسية', coreDesc:'التحكم بالكرة، التمرير، التسديد والمراوغة.',
+    fitness:'اللياقة والتطوير', fitnessDesc:'تمارين مناسبة للأعمار والقدرات البدنية.',
+    team:'اللعب الجماعي', teamDesc:'مباريات تطبيقية، روح الفريق والانضباط.',
+    age:'الفئات العمرية تحدد حسب أعمار اللاعبين المسجلين.', days:'أيام تدريب أسبوعيًا', minutes:'دقيقة لكل حصة',
+    proposed:'الجدول قابل للتحديث، يرجى التأكد من الإدارة.', membership:'الاشتراك الشهري',
+    galleryNote:'أضف صور الأكاديمية داخل مجلد public/gallery وعدّل المسارات في الكود.',
+    join:'انضم إلى فيوري', joinDesc:'ابدأ رحلتك الكروية معنا.', registerNow:'ابدأ التسجيل',
+    whatsapp:'واتساب', instagram:'إنستغرام', maps:'موقعنا على الخرائط', location:'جدة، المملكة العربية السعودية',
+    missing:'الرابط غير مضاف بعد؛ عدّله في CONFIG.', home:'الشاشة الرئيسية', back:'رجوع', close:'إغلاق',
+    foot:'أكاديمية فيوري لكرة القدم · تصميم قابل للتخصيص', stadium:'صوت الجماهير وصفارة البداية',
+  },
+  en: {
+    intro:'Where champions begin', start:'Start with sound', silent:'Enter without sound', skip:'Skip intro', sound:'Sound',
+    academy:'Academy', programs:'Programs', schedule:'Schedule', gallery:'Gallery', register:'Registration', contact:'Contact',
+    welcome:'Welcome to the Fury world', hint:'Swipe up or tap to unlock', tagline:'Build your future on the pitch',
+    about:'A football environment for core skills, teamwork, discipline and passion.',
+    core:'Core skills', coreDesc:'Ball control, passing, shooting and dribbling.',
+    fitness:'Fitness and development', fitnessDesc:'Age-appropriate fitness and physical development.',
+    team:'Team play', teamDesc:'Practice matches, teamwork and discipline.',
+    age:'Age groups are determined by registered players’ ages.', days:'Training days each week', minutes:'Minutes per session',
+    proposed:'Schedule may change. Please confirm with management.', membership:'Monthly membership',
+    galleryNote:'Add academy photos to public/gallery and update their paths in the code.',
+    join:'Join Fury', joinDesc:'Start your football journey with us.', registerNow:'Register now',
+    whatsapp:'WhatsApp', instagram:'Instagram', maps:'Find us on maps', location:'Jeddah, Saudi Arabia',
+    missing:'Link not configured yet; update CONFIG.', home:'Home screen', back:'Back', close:'Close',
+    foot:'Fury Football Academy · Customizable website', stadium:'Crowd sound and kickoff whistle',
+  }
 };
-const tr = (text, lang) => lang === 'en' ? (EN[text] || text) : text;
 const APPS = [
-  {id:'about', label:'الأكاديمية', Icon:ShieldCheck, color:'linear-gradient(135deg,#e7b64d,#8d6114)'},
-  {id:'programs', label:'البرامج', Icon:Trophy, color:'linear-gradient(135deg,#fe7b4d,#b83225)'},
-  {id:'schedule', label:'المواعيد', Icon:CalendarDays, color:'linear-gradient(135deg,#fff,#d9e1ec)', dark:true},
-  {id:'gallery', label:'الصور', Icon:Images, color:'linear-gradient(135deg,#e1a7fa,#6c54c5)'},
-  {id:'register', label:'التسجيل', Icon:Users, color:'linear-gradient(135deg,#4bc4b5,#0d7979)'},
-  {id:'contact', label:'تواصل معنا', Icon:Phone, color:'linear-gradient(135deg,#71d987,#138e47)'},
+  {id:'academy', Icon:ShieldCheck, color:'gold'}, {id:'programs', Icon:Trophy, color:'red'},
+  {id:'schedule', Icon:CalendarDays, color:'white'}, {id:'gallery', Icon:Images, color:'purple'},
+  {id:'register', Icon:Users, color:'teal'}, {id:'contact', Icon:Phone, color:'green'},
 ];
 
-function App() {
-  const [lang, setLang] = useState(() => { try { return localStorage.getItem('fury-lang') || 'ar'; } catch { return 'ar'; } });
-  const [introPlaying, setIntroPlaying] = useState(true);
-  const [soundOn, setSoundOn] = useState(false);
-  const introAudio = useRef(null);
-  const [unlocked, setUnlocked] = useState(false);
-  const [app, setApp] = useState(null);
-  const [now, setNow] = useState(new Date());
-  const [toast, setToast] = useState('');
-  const touchStart = useRef(null);
-  const t = value => tr(value, lang);
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    try { localStorage.setItem('fury-lang', lang); } catch {}
-  }, [lang]);
-  useEffect(() => { const id = setInterval(() => setNow(new Date()), 15000); return () => clearInterval(id); }, []);
-  useEffect(() => { if (!toast) return; const id = setTimeout(() => setToast(''), 3500); return () => clearTimeout(id); }, [toast]);
-  useEffect(() => {
-    const fn = e => { if (e.key === 'Escape') setApp(null); if (e.key === 'Enter' && !unlocked && !introPlaying) setUnlocked(true); };
-    window.addEventListener('keydown', fn);
-    return () => window.removeEventListener('keydown', fn);
-  }, [unlocked, introPlaying]);
-
-  const toggleSound = () => {
-    const audio = introAudio.current;
-    if (!audio) return;
-    if (soundOn) { audio.pause(); setSoundOn(false); }
-    else { audio.currentTime = 0; audio.play().then(() => setSoundOn(true)).catch(() => setSoundOn(false)); }
+// المؤثرات مصنوعة داخل المتصفح. ملف crowd.mp3 اختياري للصوت الواقعي للجماهير.
+function useFuryAudio(){
+  const context = useRef(null);
+  const enabled = useRef(false);
+  const crowd = useRef(null);
+  const getContext = () => {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return null;
+    if (!context.current) context.current = new AudioContextClass();
+    if (context.current.state === 'suspended') context.current.resume().catch(()=>{});
+    return context.current;
   };
-  const finishIntro = () => { introAudio.current?.pause(); setSoundOn(false); setIntroPlaying(false); };
-  const time = now.toLocaleTimeString('en-GB', {hour:'2-digit', minute:'2-digit'});
-  const date = now.toLocaleDateString(lang === 'ar' ? 'ar-SA' : 'en-US', {weekday:'long', day:'numeric', month:'long'});
-  const openLink = (url, kind) => {
-    if (url) window.open(url, '_blank', 'noopener,noreferrer');
-    else setToast(lang === 'ar' ? `رابط ${kind} غير مضاف بعد` : `${t(kind)} link is not set yet`);
+  const tone = (frequency=440, duration=.12, type='sine', volume=.07, endFrequency=null, delay=0) => {
+    if (!enabled.current) return;
+    const ctx = getContext(); if(!ctx) return;
+    const start = ctx.currentTime + delay;
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(frequency,start);
+    if(endFrequency) osc.frequency.exponentialRampToValueAtTime(Math.max(1,endFrequency),start+duration);
+    gain.gain.setValueAtTime(.0001,start);
+    gain.gain.exponentialRampToValueAtTime(volume,start+.012);
+    gain.gain.exponentialRampToValueAtTime(.0001,start+duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(start); osc.stop(start+duration+.02);
   };
-  const contact = () => openLink(CONFIG.whatsapp ? `https://wa.me/${CONFIG.whatsapp}` : '', 'واتساب');
-
-  function Body() {
-    switch (app) {
-      case 'about': return <><div className="hero"><img className="brandLogo heroLogo" src={asset('fury-logo.png')} alt="Fury Academy logo"/><h2>{lang === 'ar' ? CONFIG.academy : 'Fury Football Academy'}</h2><p>{CONFIG.subtitle}</p></div><div className="content"><h3>{t('اصنع مستقبلك في الملعب')}</h3><p>{t('بيئة رياضية لتطوير المهارات الأساسية والعمل الجماعي والانضباط والشغف بكرة القدم.')}</p><div className="statgrid"><div><b>3</b><span>{t('أيام تدريب أسبوعيًا')}</span></div><div><b>120</b><span>{t('دقيقة لكل حصة')}</span></div></div><div className="notice"><ShieldCheck size={18}/>{t('التفاصيل النهائية قابلة للتحديث من إدارة الأكاديمية.')}</div></div></>;
-      case 'programs': return <div className="content"><h2>{t('برامجنا التدريبية')}</h2>{[{Icon:Goal,title:'المهارات الأساسية',desc:'التحكم بالكرة، التمرير، التسديد والمراوغة.'},{Icon:Dumbbell,title:'اللياقة والتطوير',desc:'تمارين مناسبة للمستوى العمري والقدرات البدنية.'},{Icon:Trophy,title:'اللعب الجماعي',desc:'مباريات تطبيقية وروح الفريق والانضباط.'}].map(({Icon,title,desc}) => <div className="feature" key={title}><div className="featureIcon"><Icon size={25}/></div><div><b>{t(title)}</b><p>{t(desc)}</p></div></div>)}<p className="muted">{t('الفئات العمرية:')} {t(CONFIG.ageGroups)}</p></div>;
-      case 'schedule': return <div className="content"><h2>{t('مواعيد التدريب')}</h2><p className="muted">{t('الجدول المقترح — يُرجى التأكد من الإدارة قبل الحضور.')}</p>{CONFIG.schedule.map(x => <div className="scheduleRow" key={x.day}><span><CalendarDays size={20}/> {t(x.day)}</span><b>{t(x.time)}</b></div>)}<div className="price"><span>{t('الاشتراك الشهري')}</span><strong>{t(CONFIG.price)}</strong></div></div>;
-      case 'gallery': return <div className="content"><h2>{t('لحظات فيوري')}</h2><p className="muted">{t('مساحة صور الأكاديمية. أضف صورك الحقيقية لاحقًا في مجلد public/gallery.')}</p><div className="gallery"><div>⚽<small>{t('التدريب')}</small></div><div>🏆<small>{t('الإنجازات')}</small></div><div>🥅<small>{t('المباريات')}</small></div><div>👟<small>{t('اللاعبون')}</small></div></div></div>;
-      case 'register': return <div className="content"><h2>{t('انضم إلى فيوري')}</h2><p>{t('ابدأ رحلتك الكروية معنا. للتسجيل، تواصل مع الإدارة أو افتح نموذج التسجيل عند إضافته.')}</p><div className="registerCard"><Users size={42}/><h3>{t('جاهز تدخل الملعب؟')}</h3><p>{t('الأماكن والرسوم تخضع لتأكيد الإدارة.')}</p><button className="primary" onClick={() => CONFIG.registrationUrl ? openLink(CONFIG.registrationUrl, 'التسجيل') : contact()}>{t('ابدأ التسجيل')} <ArrowLeft size={18}/></button></div></div>;
-      case 'contact': return <div className="content"><h2>{t('خلّينا على تواصل')}</h2><button className="contactRow" onClick={contact}><MessageCircle/>{t('واتساب')} {lang === 'ar' ? <ChevronLeft/> : <ArrowRight/>}</button><button className="contactRow" onClick={() => openLink(CONFIG.instagram, 'إنستغرام')}><Instagram/>{t('إنستغرام')} {lang === 'ar' ? <ChevronLeft/> : <ArrowRight/>}</button><button className="contactRow" onClick={() => openLink(CONFIG.maps, 'الخرائط')}><MapPin/>{t('موقعنا')} {lang === 'ar' ? <ChevronLeft/> : <ArrowRight/>}</button><p className="muted">{t(CONFIG.city)}</p></div>;
-      default: return null;
+  const play = (name) => {
+    if (!enabled.current) return;
+    if(name==='tap') tone(710,.075,'sine',.045,480);
+    if(name==='unlock'){tone(390,.14,'sine',.07,600);tone(750,.22,'sine',.065,1080,.12);}
+    if(name==='whistle'){
+      tone(2050,.62,'sine',.10,2350,.02);
+      tone(2200,.48,'sine',.055,2000,.15);
     }
-  }
+    if(name==='intro'){
+      tone(110,.7,'sawtooth',.065,80);
+      tone(165,.75,'triangle',.055,220,.28);
+      tone(330,.8,'sine',.07,660,.65);
+      setTimeout(()=>{if(enabled.current)play('whistle')},1000);
+    }
+  };
+  const startCrowd = (base) => {
+    if (!enabled.current || crowd.current) return;
+    const audio = new Audio(`${base}crowd.mp3`);
+    audio.loop = true; audio.volume = .27;
+    audio.play().then(()=>{crowd.current=audio}).catch(()=>{});
+  };
+  const stopCrowd = () => {if(crowd.current){crowd.current.pause();crowd.current.currentTime=0;crowd.current=null;}};
+  const enable = () => {enabled.current=true;getContext();};
+  const disable = () => {enabled.current=false;stopCrowd();};
+  useEffect(()=>()=>{stopCrowd();context.current?.close().catch(()=>{});},[]);
+  return {enable,disable,play,startCrowd,stopCrowd};
+}
 
-  return <main className="site" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
-    <button className="languageSwitch" onClick={() => setLang(v => v === 'ar' ? 'en' : 'ar')} aria-label={lang === 'ar' ? 'Switch to English' : 'التبديل إلى العربية'}>{lang === 'ar' ? 'English | EN' : 'العربية | AR'}</button>
-    {introPlaying && <div className="cinematicIntro" role="dialog" aria-label={lang === 'ar' ? 'مقدمة أكاديمية فيوري' : 'Fury Academy introduction'} onAnimationEnd={e => { if (e.target === e.currentTarget) finishIntro(); }}>
-      <audio ref={introAudio} src={asset('fury-intro.wav')} preload="none" onEnded={() => setSoundOn(false)}/>
-      <div className="cinematicGlow"/>
-      <img src={asset('fury-logo.png')} className="cinematicLogo" alt="Fury Academy"/>
-      <div className="cinematicTitle">FURY FOOTBALL ACADEMY</div>
-      <div className="cinematicSubtitle">{t('هنا يبدأ الأبطال')}</div>
-      <button className="soundIntro" type="button" onClick={toggleSound}>{soundOn ? <Volume2 size={17}/> : <VolumeX size={17}/>} {soundOn ? (lang === 'ar' ? 'كتم الصوت' : 'Mute') : (lang === 'ar' ? 'تشغيل الصوت' : 'Play sound')}</button>
-      <button className="skipIntro" onClick={finishIntro}>{lang === 'ar' ? 'تخطي المقدمة' : 'Skip intro'}</button>
-    </div>}
-    <div className="ambient ambient1"/><div className="ambient ambient2"/>
-    <div className="intro"><img src={asset('fury-logo.png')} className="introLogo" alt="Fury Academy"/><span className="eyebrow">WELCOME TO THE NEXT LEVEL</span><h1>FURY <em>ACADEMY</em></h1><p>{t('تجربة رقمية تفاعلية لأكاديمية فيوري لكرة القدم')}</p><span className="hint">{t('افتح الجوال واستكشف عالم فيوري')}</span></div>
-    <div className="phone" onTouchStart={e => { touchStart.current = e.touches[0].clientY; }} onTouchEnd={e => { if (!unlocked && touchStart.current !== null && touchStart.current - e.changedTouches[0].clientY > 50) setUnlocked(true); touchStart.current = null; }}>
-      <div className="screen"><div className="wallpaper"/><div className="status"><span>{time}</span><div className="island"/><div className="indicators"><Signal size={15} fill="currentColor"/><Wifi size={16}/><BatteryFull size={22}/></div></div>
-      {!unlocked ? <div className="lockscreen" onClick={() => setUnlocked(true)}><LockKeyhole size={21} className="lock"/><div className="bigtime">{time}</div><div className="date">{date}</div><div className="lockBrand"><div className="cinematicHalo" aria-hidden="true"/><img className="brandLogo lockLogo" src={asset('fury-logo.png')} alt="Fury Academy logo"/><h2>FURY ACADEMY</h2><p>RISE. TRAIN. CONQUER.</p></div><div className="unlock"><ChevronUp size={22}/>{t('اسحب للأعلى أو اضغط لفتح القفل')}</div><div className="lockActions"><span><Camera size={20}/></span><span><Volume2 size={20}/></span></div></div> : <><div className="homescreen"><div className="welcome"><span>{t('أهلًا بك في')}</span><h2>{t('عالم فيوري')} <Star size={19} fill="currentColor"/></h2><p>{t('هنا يبدأ الأبطال')}</p></div><div className="appgrid">{APPS.map(({id,label,Icon,color,dark}) => <button className="appIcon" key={id} onClick={() => setApp(id)}><span className={'tile ' + (dark ? 'dark' : '')} style={{background:color}}><Icon size={30} strokeWidth={1.9}/></span><span>{t(label)}</span></button>)}</div><div className="dock"><button onClick={() => setApp('about')}><Home/></button><button onClick={() => setApp('register')}><Users/></button><button onClick={() => setApp('schedule')}><CalendarDays/></button><button onClick={() => setApp('contact')}><Phone/></button></div></div>{app && <div className="appwindow" key={app}><header><button aria-label={t('العودة للرئيسية')} onClick={() => setApp(null)}>{lang === 'ar' ? <ArrowRight size={21}/> : <ArrowLeft size={21}/>}</button><strong>{t(APPS.find(x => x.id === app)?.label)}</strong><button aria-label={t('إغلاق')} onClick={() => setApp(null)}><X size={20}/></button></header><div className="appbody"><Body/></div></div>}</>}
-      <button className="homebar" aria-label={t('العودة للشاشة الرئيسية')} onClick={() => unlocked ? setApp(null) : setUnlocked(true)}/>{toast && <div className="toast">{toast}</div>}</div><div className="sidebutton side1"/><div className="sidebutton side2"/>
-    </div><footer>© {now.getFullYear()} FURY ACADEMY · {t('تصميم تجريبي قابل للتخصيص')}</footer>
+function App(){
+  const [lang,setLang] = useState(()=>{try{return localStorage.getItem('fury-lang')||'ar'}catch{return 'ar'}});
+  const [intro,setIntro] = useState(true);
+  const [soundOn,setSoundOn] = useState(false);
+  const [unlocked,setUnlocked] = useState(false);
+  const [active,setActive] = useState(null);
+  const [now,setNow] = useState(new Date());
+  const [toast,setToast] = useState('');
+  const audio = useFuryAudio();
+  const touchStart = useRef(null);
+  const t = COPY[lang];
+  const logo = `${import.meta.env.BASE_URL}fury-logo.png`;
+  const base = import.meta.env.BASE_URL;
+  const clock = now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  const date = now.toLocaleDateString(lang==='ar'?'ar-SA':'en-US',{weekday:'long',day:'numeric',month:'long'});
+  useEffect(()=>{document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';try{localStorage.setItem('fury-lang',lang)}catch{}},[lang]);
+  useEffect(()=>{const id=setInterval(()=>setNow(new Date()),15000);return()=>clearInterval(id)},[]);
+  useEffect(()=>{if(!toast)return;const id=setTimeout(()=>setToast(''),3000);return()=>clearTimeout(id)},[toast]);
+  useEffect(()=>{const handle=e=>{if(e.key==='Escape')setActive(null);if(e.key==='Enter'&&!intro&&!unlocked)setUnlocked(true)};window.addEventListener('keydown',handle);return()=>window.removeEventListener('keydown',handle)},[intro,unlocked]);
+  const begin = (withSound) => {
+    if(withSound){audio.enable();audio.play('intro');audio.startCrowd(base);setSoundOn(true)}
+    setIntro(false);
+  };
+  const toggleSound = () => {if(soundOn){audio.disable();setSoundOn(false)}else{audio.enable();audio.play('tap');setSoundOn(true)}};
+  const unlock = () => {if(!unlocked){audio.play('unlock');setUnlocked(true)}};
+  const openApp = id => {audio.play('tap');setActive(id)};
+  const closeApp = () => {audio.play('tap');setActive(null)};
+  const openLink = (url) => {audio.play('tap');if(url)window.open(url,'_blank','noopener,noreferrer');else setToast(t.missing)};
+  const whatsapp = () => openLink(CONFIG.whatsapp?`https://wa.me/${CONFIG.whatsapp}`:'');
+  const pages = {
+    academy:<><div className="pageHero"><img src={logo} alt="Fury logo"/><h2>FURY ACADEMY</h2><p>{t.tagline}</p></div><p>{t.about}</p><div className="stats"><div><strong>3</strong><span>{t.days}</span></div><div><strong>120</strong><span>{t.minutes}</span></div></div></>,
+    programs:<><h2>{t.programs}</h2>{[[Goal,t.core,t.coreDesc],[Dumbbell,t.fitness,t.fitnessDesc],[Trophy,t.team,t.teamDesc]].map(([Icon,title,desc])=><div className="feature" key={title}><Icon/><div><strong>{title}</strong><p>{desc}</p></div></div>)}<p className="muted">{t.age}</p></>,
+    schedule:<><h2>{t.schedule}</h2><p className="muted">{t.proposed}</p>{CONFIG.schedule.map(day=><div className="scheduleRow" key={day.en}><span>{day[lang]}</span><b>{lang==='ar'?'5:00 – 7:00 مساءً':'5:00 – 7:00 PM'}</b></div>)}<div className="price"><span>{t.membership}</span><strong>{lang==='ar'?CONFIG.price:'SAR 200 / month'}</strong></div></>,
+    gallery:<><h2>{t.gallery}</h2><p>{t.galleryNote}</p><div className="gallery">{['⚽','🏆','🥅','👟'].map((symbol,i)=><div key={i}>{symbol}</div>)}</div></>,
+    register:<><h2>{t.join}</h2><p>{t.joinDesc}</p><div className="registerCard"><Users size={48}/><h3>{t.tagline}</h3><button className="primary" onClick={()=>CONFIG.registrationUrl?openLink(CONFIG.registrationUrl):whatsapp()}>{t.registerNow}</button></div></>,
+    contact:<><h2>{t.contact}</h2><button className="contactRow" onClick={whatsapp}><MessageCircle/>{t.whatsapp}</button><button className="contactRow" onClick={()=>openLink(CONFIG.instagram)}><Instagram/>{t.instagram}</button><button className="contactRow" onClick={()=>openLink(CONFIG.maps)}><MapPin/>{t.maps}</button><p className="muted">{t.location}</p></>,
+  };
+  return <main className="site" dir={lang==='ar'?'rtl':'ltr'}>
+    <div className="ambient one"/><div className="ambient two"/>
+    <div className="topControls"><button className="languageSwitch" onClick={()=>setLang(v=>v==='ar'?'en':'ar')}>{lang==='ar'?'English | EN':'العربية | AR'}</button><button className="soundToggle" onClick={toggleSound} aria-label={t.sound}>{soundOn?<Volume2 size={18}/>:<VolumeX size={18}/>}</button></div>
+    {intro&&<div className="cinematicIntro" role="dialog" aria-modal="true" aria-label="Fury intro"><div className="spotlight left"/><div className="spotlight right"/><div className="smoke smoke1"/><div className="smoke smoke2"/><div className="smoke smoke3"/><div className="introCenter"><div className="logoHalo"/><img className="cinematicLogo" src={logo} alt="Fury Academy"/><h1>FURY <span>ACADEMY</span></h1><p>{t.intro}</p><small>{t.stadium}</small><div className="introButtons"><button className="primary" onClick={()=>begin(true)}><Play size={17}/>{t.start}</button><button className="secondary" onClick={()=>begin(false)}><VolumeX size={17}/>{t.silent}</button></div><button className="skip" onClick={()=>begin(false)}>{t.skip}<SkipForward size={15}/></button></div></div>}
+    <section className="brandPanel"><img src={logo} className="brandLogo" alt="Fury Academy"/><div className="eyebrow">WELCOME TO THE NEXT LEVEL</div><h1>FURY <em>ACADEMY</em></h1><p>{t.tagline}</p><span className="hint">{t.welcome}</span></section>
+    <div className="phone"><div className="screen" onTouchStart={e=>touchStart.current=e.touches[0].clientY} onTouchEnd={e=>{if(touchStart.current!==null&&touchStart.current-e.changedTouches[0].clientY>45)unlock();touchStart.current=null}}><div className="wallpaper"/><div className="status"><span>{clock}</span><div className="island"/><div className="indicators"><Signal size={14}/><Wifi size={15}/><BatteryFull size={20}/></div></div>
+    {!unlocked?<div className="lockscreen" onClick={unlock} role="button" tabIndex={0} onKeyDown={e=>{if(e.key==='Enter')unlock()}}><LockKeyhole size={20}/><div className="bigtime">{clock}</div><div className="date">{date}</div><div className="lockBrand"><div className="lockGlow"/><img src={logo} alt="Fury Academy logo"/><h2>FURY ACADEMY</h2><p>RISE. TRAIN. CONQUER.</p></div><div className="unlock"><ChevronUp size={22}/>{t.hint}</div><div className="lockActions"><Camera size={20}/><Volume2 size={20}/></div></div>:<><div className="homescreen"><div className="welcome"><span>{t.welcome}</span><h2>FURY ACADEMY <Star size={17}/></h2><p>{t.intro}</p></div><div className="appgrid">{APPS.map(({id,Icon,color})=><button className="appIcon" key={id} onClick={()=>openApp(id)}><span className={`tile ${color}`}><Icon size={29}/></span><span>{t[id]}</span></button>)}</div><div className="dock"><button onClick={()=>openApp('academy')}><Home/></button><button onClick={()=>openApp('register')}><Users/></button><button onClick={()=>openApp('schedule')}><CalendarDays/></button><button onClick={()=>openApp('contact')}><Phone/></button></div></div>{active&&<div className="appwindow" key={active}><header><button onClick={closeApp} aria-label={t.back}>{lang==='ar'?<ArrowRight/>:<ArrowLeft/>}</button><strong>{t[active]}</strong><button onClick={closeApp} aria-label={t.close}><X/></button></header><div className="appbody">{pages[active]}</div></div>}</>}
+    <button className="homebar" onClick={()=>unlocked?closeApp():unlock()} aria-label={t.home}/>{toast&&<div className="toast">{toast}</div>}</div><div className="sidebutton side1"/><div className="sidebutton side2"/></div>
+    <footer>© {now.getFullYear()} {t.foot}</footer>
   </main>;
 }
 
