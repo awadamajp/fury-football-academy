@@ -6,7 +6,7 @@ const CONFIG = {
   academy: 'أكاديمية فيوري',
   subtitle: 'FURY FOOTBALL ACADEMY',
   city: 'جدة، المملكة العربية السعودية',
-  whatsapp: '', // مثال: 9665XXXXXXXX (بدون +)
+  whatsapp: '966566144141', // مثال: 9665XXXXXXXX (بدون +)
   instagram: '', // رابط الحساب
   maps: '', // رابط موقع الأكاديمية على الخرائط
   registrationUrl: '', // رابط نموذج التسجيل عند توفره
