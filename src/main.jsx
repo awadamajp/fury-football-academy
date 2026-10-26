@@ -8,7 +8,14 @@ const CONFIG = {
   whatsapp: '966554597748',
   instagram: '',
   maps: '',
-  registrationUrl: '',
+  const openApp = id => {
+  if (id === 'register') {
+    whatsapp();
+    return;
+  }
+  audio.play('tap');
+  setActive(id);
+};
   price: '200 ريال / شهر',
   schedule: [
     {ar: 'السبت', en: 'Saturday'},
@@ -135,7 +142,14 @@ function App(){
   };
   const toggleSound = () => {if(soundOn){audio.disable();setSoundOn(false)}else{audio.enable();audio.play('tap');setSoundOn(true)}};
   const unlock = () => {if(!unlocked){audio.play('unlock');setUnlocked(true)}};
-  const openApp = id => {audio.play('tap');setActive(id)};
+  const openApp = id => {
+  if (id === 'register') {
+    whatsapp();
+    return;
+  }
+  audio.play('tap');
+  setActive(id);
+};
   const closeApp = () => {audio.play('tap');setActive(null)};
   const openLink = (url) => {audio.play('tap');if(url)window.open(url,'_blank','noopener,noreferrer');else setToast(t.missing)};
   const openApp = id => {
