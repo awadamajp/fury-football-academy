@@ -142,11 +142,20 @@ function App(){
   };
   const toggleSound = () => {if(soundOn){audio.disable();setSoundOn(false)}else{audio.enable();audio.play('tap');setSoundOn(true)}};
   const unlock = () => {if(!unlocked){audio.play('unlock');setUnlocked(true)}};
-  const openApp = id => {
+ 
+const openApp = id => {
+  audio.play('tap');
+
   if (id === 'register') {
-    whatsapp();
+    const message = 'السلام عليكم، أرغب في تسجيل لاعب في أكاديمية فيوري لكرة القدم';
+    const url = `https://wa.me/966554597748?text=${encodeURIComponent(message)}`;
+    window.location.href = url;
     return;
   }
+
+  setActive(id);
+};
+
   audio.play('tap');
   setActive(id);
 };
