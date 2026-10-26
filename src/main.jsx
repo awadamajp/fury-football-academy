@@ -8,7 +8,7 @@ const CONFIG = {
   whatsapp: '966554597748',
   instagram: '',
   maps: '',
-  registrationUrl: '',
+  registrationUrl: '966554597748',
   price: '200 ريال / شهر',
   schedule: [
     {ar: 'السبت', en: 'Saturday'},
