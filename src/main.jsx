@@ -5,9 +5,9 @@ import './style.css';
 
 // غيّر البيانات هنا فقط عند الحاجة.
 const CONFIG = {
-  whatsapp: '966566144141',
+  whatsapp: '966554597748',
   instagram: '',
-  maps: '',
+  maps: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3714.6687523831256!2d39.30799477526703!3d21.402943680341714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15c3cb378b557f87%3A0x58d20d01ec95098f!2sJawharat%20Alajaweed%20Stadium!5e0!3m2!1sen!2ssa!4v1793029711025!5m2!1sen!2ssa" width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>',
   registrationUrl: '',
   price: '200 ريال / شهر',
   schedule: [
