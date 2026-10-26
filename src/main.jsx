@@ -161,14 +161,20 @@ const openApp = id => {
 };
   const closeApp = () => {audio.play('tap');setActive(null)};
   const openLink = (url) => {audio.play('tap');if(url)window.open(url,'_blank','noopener,noreferrer');else setToast(t.missing)};
-  const openApp = id => {
+ 
+const openApp = id => {
+  audio.play('tap');
+
   if (id === 'register') {
-    whatsapp();
+    const message = 'السلام عليكم، أرغب في تسجيل لاعب في أكاديمية فيوري لكرة القدم';
+    const url = `https://wa.me/966554597748?text=${encodeURIComponent(message)}`;
+    window.location.href = url;
     return;
   }
-  audio.play('tap');
+
   setActive(id);
 };
+
   const pages = {
     academy:<><div className="pageHero"><img src={logo} alt="Fury logo"/><h2>FURY ACADEMY</h2><p>{t.tagline}</p></div><p>{t.about}</p><div className="stats"><div><strong>3</strong><span>{t.days}</span></div><div><strong>120</strong><span>{t.minutes}</span></div></div></>,
     programs:<><h2>{t.programs}</h2>{[[Goal,t.core,t.coreDesc],[Dumbbell,t.fitness,t.fitnessDesc],[Trophy,t.team,t.teamDesc]].map(([Icon,title,desc])=><div className="feature" key={title}><Icon/><div><strong>{title}</strong><p>{desc}</p></div></div>)}<p className="muted">{t.age}</p></>,
